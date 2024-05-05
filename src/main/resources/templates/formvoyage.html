@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<link rel="stylesheet" type="text/css" href="webjars/bootstrap/4.3.1/css/bootstrap.min.css" />
+
+<head>
+	<meta charset="utf-8">
+	<title>Ajout des voyages</title>
+</head>
+
+<body>
+	<div th:replace="template"></div>
+	<div class="container mt-5">
+		<div class="card">
+		
+			<div class="card">
+				<div class="card-header" th:if="${mode=='new'}"> Ajout des voyages </div>
+				<div class="card-header" th:if="${mode=='edit'}">Modification des voyages </div>
+				<div class="card-body">
+					<form th:action="@{savevoyage}" method="post">
+						<input hidden name="page" class="form-control" th:value="${page}" />
+						<input hidden name="size" class="form-control" th:value="${size}" />
+
+						<div class="form-group">
+							<label class="control-label" hidden>ID :</label>
+						<input type="hidden" name="id" class="form-control" th:value="${voyage.idvoyage}" />
+					</div>
+					<!--<span th:errors= ${voyage.nomvoyage} class="text-danger"> </span>-->
+				
+					<div class="form-group">
+							<label class="control-label">Nom voyage :</label>
+							<input type="text" name="nomvoyage" class="form-control" th:value="${voyage.nomvoyage}" />
+							<!--<span th:errors= ${voyage.nomvoyage} class="text-danger"> </span>-->
+
+					</div>
+					<div class="form-group">
+						<label class="control-label">Prix voyage :</label>
+						<input type="text" name="prixvoyage" class="form-control" th:value="${voyage.prixvoyage}" />
+						<!--		<span th:errors= ${voyage.prixvoyage} class="text-danger"> </span>-->
+					</div>
+					<div class="form-group">
+						<label class="control-label">date création :</label>
+						<input type="date" name="dateCreation" class="form-control" th:value="${voyage.dateCreation}" />
+						<!--<span th:errors= ${voyage.dateCreation} class="text-danger"> </span>-->
+					</div>
+					<div class="form-group">
+						<label class="control-label">Categorie :</label>
+						<select name="categorie" class="form-control" th:value="${voyage.categorie.idCat}"
+							th:if="${!#strings.isEmpty(voyage.categorie)}">
+							<option th:each="c:${categories}" th:if="${mode=='edit'}" th:value="${c.idCat}" th:text="${c.nomCat}"
+								th:selected="${ c.idCat==voyage.categorie.idCat}">
+							</option>
+						</select>
+						<!-- s'il s'agit d'un ajout (mode==new) ou d'une modification d'un voyage ayant une catégorie null -->
+						<select name="categorie" class="form-control" th:if="${#strings.isEmpty(voyage.categorie)}">
+							<option th:each="c:${categories}" th:value="${c.idCat}" th:text="${c.nomCat}">
+							</option>
+						</select>
+					</div>
+					<div>
+						<button type="submit" class="btn btn-primary">Valider</button>
+					</div>
+					</form>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

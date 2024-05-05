@@ -35,5 +35,7 @@ public interface voyageService {
 	List<voyage> findByOrderByNomvoyageAsc();
 
 	List<voyage> triervoyagesNomsPrix();
+	List<Categorie> getAllCategories();
+
 
 }

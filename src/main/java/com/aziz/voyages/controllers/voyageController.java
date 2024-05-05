@@ -8,11 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.aziz.voyages.entities.Categorie;
 import com.aziz.voyages.entities.voyage;
 import com.aziz.voyages.service.voyageService;
+
+import jakarta.validation.Valid;
 
 @Controller
 public class voyageController {
@@ -33,22 +38,34 @@ public class voyageController {
 	}
 
 	@RequestMapping("/showCreate")
-	public String showCreate() {
-		return "createvoyage";
+	public String showCreate(ModelMap modelMap) {
+		modelMap.addAttribute("voyage", new voyage());
+		List<Categorie> cats = voyageService.getAllCategories();
+		modelMap.addAttribute("mode", "new");
+		modelMap.addAttribute("categories", cats);
+		return "formvoyage";
 	}
 
 	@RequestMapping("/savevoyage")
-	public String savevoyage(@ModelAttribute("produit") voyage voyage, @RequestParam("date") String date,
-			ModelMap modelMap) throws ParseException {
+	public String savevoyage(@Valid voyage voyage, BindingResult bindingResult,
+			@RequestParam(name = "page", defaultValue = "0") int page,
+			@RequestParam(name = "size", defaultValue = "2") int size) {
+		int currentPage;
+		boolean isNew = false;
+		if (bindingResult.hasErrors())
+			return "formvoyage";
+		if (voyage.getIdvoyage() == null) // ajout
+			isNew = true;
+		voyageService.savevoyage(voyage);
+		if (isNew) // ajout
+		{
+			Page<voyage> voys = voyageService.getAllvoyagesParPage(page, size);
+			currentPage = voys.getTotalPages() - 1;
+		} else // modif
+			currentPage = page;
+		// return "formvoyage";
+		return ("redirect:/Listevoyages?page="+currentPage+"&size="+size);
 
-		SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
-		Date dateCreation = dateformat.parse(String.valueOf(date));
-		voyage.setDateCreation(dateCreation);
-
-		voyage savevoyage = voyageService.savevoyage(voyage);
-		String msg = "produit enregistré avec Id " + savevoyage.getIdvoyage();
-		modelMap.addAttribute("msg", msg);
-		return "createvoyage";
 	}
 
 	@RequestMapping("/supprimervoyage")
@@ -66,10 +83,16 @@ public class voyageController {
 	}
 
 	@RequestMapping("/modifiervoyage")
-	public String editervoyage(@RequestParam("id") Long id, ModelMap modelMap) {
+	public String editervoyage(@RequestParam("id") Long id, ModelMap modelMap,@RequestParam (name="page",defaultValue = "0") int page,
+			@RequestParam (name="size", defaultValue = "2") int size) {
 		voyage v = voyageService.getvoyage(id);
-		modelMap.addAttribute("produit", v);
-		return "editervoyage";
+		List<Categorie> cats = voyageService.getAllCategories();
+		modelMap.addAttribute("voyage", v);
+		modelMap.addAttribute("mode","edit");
+		modelMap.addAttribute("categories", cats);
+		modelMap.addAttribute("page", page);
+		modelMap.addAttribute("size", size);
+		return "formvoyage";
 	}
 
 	@RequestMapping("/updatevoyage")

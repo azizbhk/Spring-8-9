@@ -19,19 +19,29 @@
 				<table class="table table-striped">
 					<tr>
 						<th>ID</th>
-						<th>Nom voyage</th>
+						<th>Depart</th>
 						<th>Prix</th>
 						<th>Date</th>
+						<th>Type voyage</th>
+						
+						
 					</tr>
 					<tr th:each="p:${voyages.content}">
 						<td th:text="${p.idvoyage}"></td>
 						<td th:text="${p.nomvoyage}"></td>
 						<td th:text="${p.prixvoyage}"></td>
-						<td th:text="${p.dateCreation}"></td>  
-						<td><a class="btn btn-danger" onclick="return confirm('Etes-vous sûr ?')" …
+						<td th:text="${p.dateCreation}"></td>
+						<td th:if= "${!#strings.isEmpty(p.categorie)}" th:text="${p.categorie.nomCat}"></td>
+						 <td th:if= "${#strings.isEmpty(p.categorie)}" th:text="${'Pas de Catégorie'}"></td>
+						<td><a class="btn btn-success"
+						th:href="@{modifiervoyage(id=${p.idvoyage},page=${currentPage},size=${size})}">Editer</a></td>
+					
+					
+						
+						<td><a class="btn btn-warning" onclick="return confirm('Etes-vous sûr ?')" …
 								th:href="@{supprimervoyage(id=${p.idvoyage},page=${currentPage},size=${size})}">Supprimer</a>
 								
-						</td>
+								
 					</tr>
 				</table>
 				<ul class="nav nav-pills">

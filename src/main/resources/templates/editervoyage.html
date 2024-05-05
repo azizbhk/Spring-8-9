@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" />
+
+<head>
+	<meta charset="utf-8">
+	<title>Ajout des voyages</title>
+</head>
+
+<body>
+	<div th:replace="template"></div>
+	<div class="container mt-5">
+		<div class="card">
+			<div class="card-header">
+				Modifier des voyages
+			</div>
+			<div class="card-body">
+				<form th:action="@{savevoyage}" method="post">
+					<div class="form-group">
+						<label class="control-label" hidden>ID voyage :</label>
+						<input type="hidden" name="idvoyage" class="form-control" th:value="${voyage.idvoyage}" />
+					</div>
+					<div class="form-group">
+						<label class="control-label">Depart:</label>
+						<input type="text" name="nomvoyage" class="form-control" th:value="${voyage.nomvoyage}" />
+						<span th:errors=${voyage.nomvoyage} class="text-danger"> </span>
+					</div>
+					<div class="form-group">
+						<label class="control-label">Prix voyage :</label>
+						<input type="text" name="prixvoyage" class="form-control" th:value="${voyage.prixvoyage}" />
+						<span th:errors=${voyage.prixvoyage} class="text-danger"> </span>
+					</div>
+					<div class="form-group">
+						<label class="control-label">date :</label>
+						<input type="date" name="dateCreation" class="form-control"
+							th:value="${voyage.dateCreation}" />
+						<span th:errors=${voyage.dateCreation} class="text-danger"> </span>
+					</div>
+					<div>
+						<button type="submit" class="btn btn-primary">Valider</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

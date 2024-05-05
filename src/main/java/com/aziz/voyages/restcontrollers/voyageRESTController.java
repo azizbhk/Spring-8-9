@@ -16,7 +16,7 @@ import com.aziz.voyages.service.voyageService;
 @RestController
 @RequestMapping("/api")
 @CrossOrigin
-public class voyageRESTController {
+public class VoyageRESTController {
 	@Autowired
 	voyageService VoyageService;
 
@@ -43,7 +43,7 @@ public class voyageRESTController {
 	{
 	VoyageService.deletevoyageById(id);
 	}
-	@RequestMapping(value="/prodscat/{idCat}",method = RequestMethod.GET)
+	@RequestMapping(value="/voyagescat/{idCat}",method = RequestMethod.GET)
 	public List<voyage> getvoyagesByCatId(@PathVariable("idCat") Long idCat) {
 	return VoyageService.findByCategorieIdCat(idCat);
 	}

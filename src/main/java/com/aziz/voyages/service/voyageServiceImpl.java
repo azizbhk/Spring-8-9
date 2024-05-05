@@ -9,17 +9,21 @@ import org.springframework.stereotype.Service;
 
 import com.aziz.voyages.entities.Categorie;
 import com.aziz.voyages.entities.voyage;
+import com.aziz.voyages.repos.CategorieRepository;
 import com.aziz.voyages.repos.voyageRepository;
 @Service
 
 public class voyageServiceImpl implements voyageService  {
 	@Autowired
 	voyageRepository voyageRepository;
+	@Autowired
+	CategorieRepository categorieRepository;
 
 	@Override
 	public voyage savevoyage(voyage v) {
 		return voyageRepository.save(v);
 	}
+	
 
 	@Override
 	public voyage updatevoyage(voyage v) {
@@ -98,6 +102,11 @@ public class voyageServiceImpl implements voyageService  {
 	public List<voyage> triervoyagesNomsPrix() {
 		
 		return voyageRepository.triervoyagesNomsPrix();
+	}
+
+	@Override
+	public List<Categorie> getAllCategories() {
+		return categorieRepository.findAll();
 	}
 
 }
