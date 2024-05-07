@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec=https://www.thymeleaf.org/thymeleaf-extras-springsecurity6>
 <link rel="stylesheet" type="text/css" href="webjars/bootstrap/4.3.1/css/bootstrap.min.css" />
 
 <head>
@@ -33,13 +34,12 @@
 						<td th:text="${p.dateCreation}"></td>
 						<td th:if= "${!#strings.isEmpty(p.categorie)}" th:text="${p.categorie.nomCat}"></td>
 						 <td th:if= "${#strings.isEmpty(p.categorie)}" th:text="${'Pas de Catégorie'}"></td>
-						<td><a class="btn btn-success"
-						th:href="@{modifiervoyage(id=${p.idvoyage},page=${currentPage},size=${size})}">Editer</a></td>
+						 <td  sec:authorize="hasRole('ADMIN')" ><a class="btn btn-success" th:href="@{modifiervoyage(id=${p.idvoyage}, page=${currentPage},size=${size})}">Editer</a></td>
 					
 					
 						
-						<td><a class="btn btn-warning" onclick="return confirm('Etes-vous sûr ?')" …
-								th:href="@{supprimervoyage(id=${p.idvoyage},page=${currentPage},size=${size})}">Supprimer</a>
+						<td sec:authorize="hasAuthority('ADMIN')"><a class="btn btn-warning" onclick="return confirm('Etes-vous sûr ?')" …
+								th:href="@{supprimervoyage(id=${v.idvoyage},page=${currentPage},size=${size})}">Supprimer</a>
 								
 								
 					</tr>
